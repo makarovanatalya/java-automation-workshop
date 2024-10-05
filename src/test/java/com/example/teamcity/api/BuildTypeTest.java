@@ -1,7 +1,10 @@
 package com.example.teamcity.api;
 
+import com.example.teamcity.api.enums.RoleTypes;
 import com.example.teamcity.api.models.BuildType;
 import com.example.teamcity.api.models.Project;
+import com.example.teamcity.api.models.Roles;
+import com.example.teamcity.api.models.TestData;
 import com.example.teamcity.api.requests.CheckedRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import com.example.teamcity.api.spec.Specifications;
@@ -13,7 +16,6 @@ import java.util.Arrays;
 
 import static com.example.teamcity.api.enums.Endpoint.*;
 import static com.example.teamcity.api.generators.TestDataGenerator.generate;
-import static io.qameta.allure.Allure.step;
 
 @Test(groups = {"Regression"})
 public class BuildTypeTest extends BaseApiTest {
@@ -50,25 +52,33 @@ public class BuildTypeTest extends BaseApiTest {
 
     @Test(description = "Project admin should be able to create build type for their project", groups = {"Positive", "Roles"})
     public void projectAdminCreatesBuildTypeTest() {
-        step("Create user");
-        step("Create project");
-        step("Grant user PROJECT_ADMIN role in project");
+        var createdProject = superUserCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
 
-        step("Create buildType for project by user (PROJECT_ADMIN)");
-        step("Check buildType was created successfully");
+        testData.getUser().setRoles(generate(Roles.class, RoleTypes.PROJECT_ADMIN, "p:" + createdProject.getId()));
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+
+        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).create(testData.getBuildType());
+
+        softy.assertEquals(createdProject.getId(), createdBuildType.getProject().getId(), "Created build type is associated with incorrect project");
     }
 
     @Test(description = "Project admin should not be able to create build type for not their project", groups = {"Negative", "Roles"})
     public void projectAdminCreatesBuildTypeForAnotherUserProjectTest() {
-        step("Create user1");
-        step("Create project1");
-        step("Grant user1 PROJECT_ADMIN role in project1");
+        var testData2 = generate();
 
-        step("Create user2");
-        step("Create project2");
-        step("Grant user2 PROJECT_ADMIN role in project2");
+        // prepare both projects
+        for (TestData tData:  Arrays.asList(testData, testData2)) {
+            var createdProject = superUserCheckRequests.<Project>getRequest(PROJECTS).create(tData.getProject());
+            tData.getUser().setRoles(generate(Roles.class, RoleTypes.PROJECT_ADMIN, "p:" + createdProject.getId()));
+            superUserCheckRequests.getRequest(USERS).create(tData.getUser());
+        }
 
-        step("Create buildType for project1 by user2");
-        step("Check buildType was not created with forbidden code");
+        // try to create build by user1 in project2
+        testData.getBuildType().setProject(testData2.getProject());
+        new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)
+                .create(testData.getBuildType())
+                .then().assertThat().statusCode(HttpStatus.SC_FORBIDDEN)
+                .body(Matchers.containsString("You do not have enough permissions to edit project with id: %s".formatted(testData2.getProject().getId())));
     }
 }

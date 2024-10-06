@@ -14,4 +14,9 @@ public final class RandomData {
         return TEST_PREFIX + RandomStringUtils
                 .randomAlphabetic(Math.max(length - TEST_PREFIX.length(), MAX_LENGTH));
     }
+
+    public static String getRandomSpecialCharacter() {
+        String specialCharacters = "!@#$%^&*()_+{}[]";
+        return RandomStringUtils.random(1, specialCharacters);
+    }
 }

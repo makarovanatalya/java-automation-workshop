@@ -1,6 +1,7 @@
 package com.example.teamcity.api.models;
 
 import com.example.teamcity.api.annotations.Optional;
+import com.example.teamcity.api.annotations.Parameterizable;
 import com.example.teamcity.api.annotations.Random;
 import com.example.teamcity.api.annotations.Searchable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,4 +25,7 @@ public class Project extends BaseModel {
     private Project parentProject;
     @Optional
     private Project sourceProject;
+    @Builder.Default
+    @Parameterizable
+    private Boolean copyAllAssociatedSettings = true;
 }

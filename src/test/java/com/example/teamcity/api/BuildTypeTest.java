@@ -25,11 +25,9 @@ public class BuildTypeTest extends BaseApiTest {
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
-
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
 
         var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(testData.getBuildType().getId());
-
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(), "Build type name is not correct");
     }
 
@@ -38,12 +36,10 @@ public class BuildTypeTest extends BaseApiTest {
         var buildTypeWithSameId = generate(Arrays.asList(testData.getProject()), BuildType.class, testData.getBuildType().getId());
 
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
-
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
-
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
-
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
+
         new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)
                 .create(buildTypeWithSameId)
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST)
@@ -65,9 +61,8 @@ public class BuildTypeTest extends BaseApiTest {
 
     @Test(description = "Project admin should not be able to create build type for not their project", groups = {"Negative", "Roles"})
     public void projectAdminCreatesBuildTypeForAnotherUserProjectTest() {
-        var testData2 = generate();
-
         // prepare both projects
+        var testData2 = generate();
         for (TestData tData:  Arrays.asList(testData, testData2)) {
             var createdProject = superUserCheckRequests.<Project>getRequest(PROJECTS).create(tData.getProject());
             tData.getUser().setRoles(generate(Roles.class, RoleTypes.PROJECT_ADMIN, "p:" + createdProject.getId()));

@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Properties extends BaseModel {
-//    private Integer count = 3;
     @Parameterizable
     private List<Property> property;
 }

@@ -117,8 +117,6 @@ public class ProjectTest  extends BaseApiTest {
         softy.assertEquals(createdProject.getParentProject().getId(), createdCopiedProject.getParentProject().getId(), "Copied project has different parent project");
     }
 
-
-
     @Test(description = "Project admin can't create Root project", groups = {"Negative", "Roles"})
     public void projectAdminCanNotCreateRootProject() {
         // create project and user with role project admin for this project
@@ -145,7 +143,8 @@ public class ProjectTest  extends BaseApiTest {
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
-        userCheckRequests.<Project>getRequest(PROJECTS).create(subProject);
+        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).create(subProject);
+        softy.assertEquals(subProject.getParentProject().getId(), createdProject.getParentProject().getId(), "Parent project is incorrect");
     }
 
     @Test(description = "System admin can create Root project", groups = {"Positive", "Roles"})
@@ -155,10 +154,11 @@ public class ProjectTest  extends BaseApiTest {
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
-        userCheckRequests.<Project>getRequest(PROJECTS).create(project);
+        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).create(project);
+        softy.assertEquals("_Root", createdProject.getParentProject().getId(), "Parent project is incorrect");
     }
 
-    @Test(description = "Project can be found by name", groups = {"Positive", "Roles"})
+    @Test(description = "Project can be found by name", groups = {"Positive", "Search"})
     public void projectCanBeFoundByName() {
         var project = testData.getProject();
         superUserCheckRequests.<Project>getRequest(PROJECTS).create(project);
@@ -170,6 +170,5 @@ public class ProjectTest  extends BaseApiTest {
         softy.assertTrue(foundedProjects.getProject().size() == 1, "Unexpected count of founded projects");
         softy.assertEquals(project.getId(), foundedProject.getId(), "Id of founded project is incorrect");
         softy.assertEquals(project.getName(), foundedProject.getName(), "Name of founded project is incorrect");
-
     }
 }

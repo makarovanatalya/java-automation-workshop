@@ -2,6 +2,7 @@ package com.example.teamcity.api.models;
 
 import com.example.teamcity.api.annotations.Optional;
 import com.example.teamcity.api.annotations.Random;
+import com.example.teamcity.api.annotations.Searchable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class Project extends BaseModel {
     @Random
     private String id;
+    @Searchable
     @Random
     private String name;
     @Optional

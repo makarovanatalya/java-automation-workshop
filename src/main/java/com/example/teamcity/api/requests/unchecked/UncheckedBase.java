@@ -1,5 +1,6 @@
 package com.example.teamcity.api.requests.unchecked;
 
+import com.example.teamcity.api.annotations.Searchable;
 import com.example.teamcity.api.enums.Endpoint;
 import com.example.teamcity.api.models.BaseModel;
 import com.example.teamcity.api.requests.CrudInterface;
@@ -29,6 +30,28 @@ public class UncheckedBase extends Request implements CrudInterface {
                 .given()
                 .spec(spec)
                 .get(endpoint.getUrl() + "/id:" + id);
+    }
+
+    @Override
+    public Response search(BaseModel model) {
+        // building search URI
+        StringBuilder searchURI = new StringBuilder("?locator=");
+        for (var field: model.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            if (field.isAnnotationPresent(Searchable.class)) {
+                try {
+                    var value = field.get(model);
+                    if (value != null)
+                        searchURI.append(field.getName()).append(":").append(value).append("&");
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return RestAssured
+                .given()
+                .spec(spec)
+                .get(endpoint.getUrl() + searchURI);
     }
 
     @Override

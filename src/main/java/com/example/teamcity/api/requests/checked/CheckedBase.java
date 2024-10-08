@@ -38,6 +38,14 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
     }
 
     @Override
+    public T search(BaseModel model) {
+        return (T) uncheckedBase
+                .search(model)
+                .then().assertThat().statusCode(HttpStatus.SC_OK)
+                .extract().as(endpoint.getSearchResultClass());
+    }
+
+    @Override
     public T update(String id, BaseModel model) {
         return (T) uncheckedBase
                 .update(id, model)

@@ -2,6 +2,7 @@ package com.example.teamcity.api;
 
 import com.example.teamcity.api.enums.RoleTypes;
 import com.example.teamcity.api.models.Project;
+import com.example.teamcity.api.models.Projects;
 import com.example.teamcity.api.models.Roles;
 import com.example.teamcity.api.requests.CheckedRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
@@ -155,5 +156,20 @@ public class ProjectTest  extends BaseApiTest {
 
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
         userCheckRequests.<Project>getRequest(PROJECTS).create(project);
+    }
+
+    @Test(description = "Project can be found by name", groups = {"Positive", "Roles"})
+    public void projectCanBeFoundByName() {
+        var project = testData.getProject();
+        superUserCheckRequests.<Project>getRequest(PROJECTS).create(project);
+
+        var foundedProjects = superUserCheckRequests.<Projects>getRequest(PROJECTS).search(project);
+        var foundedProject = foundedProjects.getProject().get(0);
+
+        softy.assertTrue(foundedProjects.getCount().equals(1), "Unexpected count of founded projects");
+        softy.assertTrue(foundedProjects.getProject().size() == 1, "Unexpected count of founded projects");
+        softy.assertEquals(project.getId(), foundedProject.getId(), "Id of founded project is incorrect");
+        softy.assertEquals(project.getName(), foundedProject.getName(), "Name of founded project is incorrect");
+
     }
 }

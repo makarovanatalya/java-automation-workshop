@@ -13,6 +13,8 @@ import org.testng.annotations.BeforeSuite;
 import java.util.Map;
 
 public class BaseUiTest extends BaseTest {
+    protected static final String REPO_URL = "https://github.com/makarovanatalya/java-automation-workshop";
+
     @BeforeSuite(alwaysRun = true)
     public void setupUitest() {
         Configuration.browser = Config.getProperty("browser");

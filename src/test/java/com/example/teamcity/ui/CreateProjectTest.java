@@ -13,8 +13,6 @@ import static io.qameta.allure.Allure.step;
 
 @Test(groups = {"Regression"})
 public class CreateProjectTest extends BaseUiTest {
-    private static final String REPO_URL = "https://github.com/AlexPshe/spring-core-for-qa";
-
     @Test(description = "User should be able to create project", groups = {"Positive"})
     public void userCreatesProject() {
         // preparing environments

@@ -14,10 +14,15 @@ public abstract class CreateBasePage extends BasePage {
     protected SelenideElement submitButton = $(Selectors.byAttribute("value", "Proceed"));
     protected SelenideElement buildTypeNameInput = $("#buildTypeName");
     protected SelenideElement connectionSuccessfulMessage = $(".connectionSuccessful");
+    protected SelenideElement error = $("#error_url");
 
-    protected void baseCreateForm(String url) {
+    protected void uncheckedBaseCreateForm(String url) {
         urlInput.val(url);
         submitButton.click();
+    }
+
+    protected void baseCreateForm(String url) {
+        this.uncheckedBaseCreateForm(url);
         connectionSuccessfulMessage.should(Condition.appear, BASE_WAITING);
     }
 }

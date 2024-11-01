@@ -30,7 +30,7 @@ public class BuildTest extends BaseApiTest {
 
         // wait for build finished
         for (int i = 0; i < 10; i++) {
-            createdBuild = superUserCheckRequests.<Build>getRequest(BUILDS).read(createdBuild.getId());
+            createdBuild = superUserCheckRequests.<Build>getRequest(BUILDS).read("id:" + createdBuild.getId());
             if (createdBuild.getStatus() != null && createdBuild.getStatus().equals(SUCCESS))
                 break;
             Thread.sleep(1000);

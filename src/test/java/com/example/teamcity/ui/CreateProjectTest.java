@@ -4,12 +4,11 @@ import com.codeborne.selenide.Condition;
 import com.example.teamcity.api.enums.Endpoint;
 import com.example.teamcity.api.generators.TestDataStorage;
 import com.example.teamcity.api.models.Project;
+import com.example.teamcity.api.models.Projects;
 import com.example.teamcity.ui.pages.ProjectPage;
 import com.example.teamcity.ui.pages.ProjectsPage;
 import com.example.teamcity.ui.pages.admin.CreateProjectPage;
 import org.testng.annotations.Test;
-
-import static io.qameta.allure.Allure.step;
 
 @Test(groups = {"Regression"})
 public class CreateProjectTest extends BaseUiTest {
@@ -20,7 +19,7 @@ public class CreateProjectTest extends BaseUiTest {
 
         // UI steps
         CreateProjectPage.open("_Root")
-                .createForm(REPO_URL)
+                .createFormSuccessfully(REPO_URL)
                 .setupProject(testData.getProject().getName(), testData.getBuildType().getName());
 
         // checking API
@@ -44,20 +43,15 @@ public class CreateProjectTest extends BaseUiTest {
     @Test(description = "User should not be able to create project without name", groups = {"Negative"})
     public void userCreatesProjectWithoutName() {
         // preparing environments
-        step("Login as user");
-        step("Check number of projects");
+        var projectsCountBefore = superUserUncheckRequests.getRequest(Endpoint.PROJECTS).read("").as(Projects.class).getCount();
+        loginAs(testData.getUser());
 
-        // UI steps
-        step("Open `Create Project Page` (http://localhost:8111/admin/createObjectMenu.html)");
-        step("Send all project parameters (repository URL)");
-        step("Click `Proceed`");
-        step("Set Project Name");
-        step("Click `Proceed`");
+        // UI steps & checks
+        var errorMessage = CreateProjectPage.open("_Root").createFormUnsuccessfully("");
+        softy.assertEquals(errorMessage, "URL must not be empty", "The error message is incorrect");
 
         // checking API
-        step("Check that number of projects did not change");
-
-        // checking UI
-        step("Check that error appears `Project name must not be empty`");
+        var projectsCountAfter = superUserUncheckRequests.getRequest(Endpoint.PROJECTS).read("").as(Projects.class).getCount();
+        softy.assertEquals(projectsCountBefore, projectsCountAfter, "Number of projects changed");
     }
 }

@@ -1,5 +1,6 @@
 package com.example.teamcity.ui.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
@@ -14,7 +15,13 @@ public class CreateProjectPage extends CreateBasePage {
         return Selenide.open(CREATE_URL.formatted(projectId, PROJECT_SHOW_MODE), CreateProjectPage.class);
     }
 
-    public CreateProjectPage createForm(String url) {
+    public String createFormUnsuccessfully(String url) {
+        uncheckedBaseCreateForm(url);
+        error.shouldBe(Condition.visible, BASE_WAITING);
+        return error.text();
+    }
+
+    public CreateProjectPage createFormSuccessfully(String url) {
         baseCreateForm(url);
         return this;
     }

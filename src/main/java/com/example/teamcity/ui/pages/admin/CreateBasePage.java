@@ -16,7 +16,7 @@ public abstract class CreateBasePage extends BasePage {
     protected SelenideElement buildTypeNameInput = $("#buildTypeName");
     protected SelenideElement buildTypeIdInput = $("#buildTypeExternalId");
     protected SelenideElement connectionSuccessfulMessage = $(".connectionSuccessful");
-    protected SelenideElement error = $("#error_url");
+    public SelenideElement error = $("#error_url");
 
     protected void uncheckedBaseCreateForm(String url) {
         urlInput.val(url);
@@ -27,4 +27,10 @@ public abstract class CreateBasePage extends BasePage {
         this.uncheckedBaseCreateForm(url);
         connectionSuccessfulMessage.should(Condition.appear, BASE_WAITING);
     }
+
+    protected void baseCreateFormWithError(String url) {
+        this.uncheckedBaseCreateForm(url);
+        error.shouldBe(Condition.visible, BASE_WAITING);
+    }
+
 }

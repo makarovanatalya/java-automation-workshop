@@ -21,7 +21,7 @@ public class CreateBuildTypeTest extends BaseUiTest{
         var createdProject = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).create(testData.getProject());
         loginAs(testData.getUser());
 
-        // create project
+        // create build type
         CreateBuildTypePage.open(createdProject.getId()).createFormSuccessfully(REPO_URL).setupBuildType(buildTypeName);
 
         // check API
@@ -44,7 +44,7 @@ public class CreateBuildTypeTest extends BaseUiTest{
         var createdProject = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).create(testData.getProject());
         loginAs(testData.getUser());
 
-        // create project
+        // create build type
         CreateBuildTypePage.open(createdProject.getId()).goToCreateManually().createFormManuallySuccessfully(buildTypeName, buildTypeId);
 
         // check API
@@ -56,15 +56,15 @@ public class CreateBuildTypeTest extends BaseUiTest{
         BuildPage.open(buildTypeId).title.shouldHave(Condition.exactText(buildTypeName));
     }
 
-    @Test(description = "User should not be able to create build with non-existent repository", groups = {"Negative"})
+    @Test(description = "User should not be able to create build type with non-existent repository", groups = {"Negative"})
     public void userCreatesBuildTypeWithNonExistentRepo() {
         // setup
         var buildTypeName = testData.getBuildType().getName();
         var createdProject = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).create(testData.getProject());
         loginAs(testData.getUser());
 
-        // create project with non-existent repo
-        var errorMessage = CreateBuildTypePage.open(createdProject.getId()).createFormUnsuccessfully(REPO_URL + getString(5));
+        // create build type with non-existent repo
+        var errorMessage = CreateBuildTypePage.open(createdProject.getId()).createFormUnsuccessfully(REPO_URL + getString(5)).error.text();
         softy.assertTrue(errorMessage.contains("No such device or address"), "Got wong error message: %s".formatted(errorMessage));
 
         // check that build type was not created
@@ -79,8 +79,8 @@ public class CreateBuildTypeTest extends BaseUiTest{
         var createdProject = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).create(testData.getProject());
         loginAs(testData.getUser());
 
-        // create project with empty repo
-        var errorMessage = CreateBuildTypePage.open(createdProject.getId()).createFormUnsuccessfully("");
+        // create build type with empty repo
+        var errorMessage = CreateBuildTypePage.open(createdProject.getId()).createFormUnsuccessfully("").error.text();
         softy.assertEquals(errorMessage, "URL must not be empty");
 
         // check that build type was not created

@@ -3,9 +3,11 @@ package com.example.teamcity.ui.pages.admin;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import lombok.Getter;
 
 import static com.codeborne.selenide.Selenide.$;
 
+@Getter
 public class CreateBuildTypePage extends CreateBasePage {
     private static final String BUILD_SHOW_MODE = "createBuildTypeMenu";
     private static final String FROM_URL_ANCHOR = "#createFromUrl";
@@ -18,10 +20,9 @@ public class CreateBuildTypePage extends CreateBasePage {
         return Selenide.open(CREATE_URL.formatted(projectId, BUILD_SHOW_MODE) + FROM_URL_ANCHOR, CreateBuildTypePage.class);
     }
 
-    public String createFormUnsuccessfully(String url) {
-        uncheckedBaseCreateForm(url);
-        error.shouldBe(Condition.visible, BASE_WAITING);
-        return error.text();
+    public CreateBuildTypePage createFormUnsuccessfully(String url) {
+        baseCreateFormWithError(url);
+        return this;
     }
 
     public CreateBuildTypePage createFormSuccessfully(String url) {

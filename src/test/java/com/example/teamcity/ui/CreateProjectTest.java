@@ -47,7 +47,7 @@ public class CreateProjectTest extends BaseUiTest {
         loginAs(testData.getUser());
 
         // UI steps & checks
-        var errorMessage = CreateProjectPage.open("_Root").createFormUnsuccessfully("");
+        var errorMessage = CreateProjectPage.open("_Root").createFormUnsuccessfully("").error.text();
         softy.assertEquals(errorMessage, "URL must not be empty", "The error message is incorrect");
 
         // checking API

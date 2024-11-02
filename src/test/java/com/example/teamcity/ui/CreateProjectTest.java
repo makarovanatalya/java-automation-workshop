@@ -5,8 +5,8 @@ import com.example.teamcity.api.enums.Endpoint;
 import com.example.teamcity.api.generators.TestDataStorage;
 import com.example.teamcity.api.models.Project;
 import com.example.teamcity.api.models.Projects;
-import com.example.teamcity.ui.pages.ProjectPage;
-import com.example.teamcity.ui.pages.ProjectsPage;
+import com.example.teamcity.ui.pages.projectbased.ProjectPage;
+import com.example.teamcity.ui.pages.projectbased.ProjectsPage;
 import com.example.teamcity.ui.pages.admin.CreateProjectPage;
 import org.testng.annotations.Test;
 

@@ -1,4 +1,4 @@
-package com.example.teamcity.ui.pages;
+package com.example.teamcity.ui.pages.projectbased;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
@@ -11,7 +11,7 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class ProjectPage extends BasePage {
+public class ProjectPage extends ProjectBasedBasePage {
     private static final String PROJECT_URL = "/project/%s";
 
     public SelenideElement title = $("span[class*='ProjectPageHeader']");

@@ -4,7 +4,10 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
+import java.time.Duration;
+
 public abstract class BasePageElement {
+    protected static final Duration BASE_WAITING = Duration.ofSeconds(30);
     private final SelenideElement element;
 
     public BasePageElement(SelenideElement element) {

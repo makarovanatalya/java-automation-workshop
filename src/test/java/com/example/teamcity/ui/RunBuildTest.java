@@ -10,6 +10,7 @@ import java.util.Arrays;
 import static com.example.teamcity.api.enums.Endpoint.BUILD_TYPES;
 import static com.example.teamcity.api.enums.Endpoint.PROJECTS;
 
+@Test(groups = {"Regression"})
 public class RunBuildTest extends BaseUiTest{
     @Test(description = "User should be able to run build", groups = {"Positive"})
     public void userRunsBuild() {

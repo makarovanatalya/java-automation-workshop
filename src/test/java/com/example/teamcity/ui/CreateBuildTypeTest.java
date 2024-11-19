@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import static com.example.teamcity.api.generators.RandomData.getString;
 
+@Test(groups = {"Regression"})
 public class CreateBuildTypeTest extends BaseUiTest{
 
     @Test(description = "User should be able to create build type from a repository URL", groups = {"Positive"})

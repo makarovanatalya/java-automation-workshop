@@ -17,6 +17,7 @@ import static com.example.teamcity.api.generators.RandomData.getRandomSpecialCha
 import static com.example.teamcity.api.generators.RandomData.getString;
 import static com.example.teamcity.api.generators.TestDataGenerator.generate;
 
+@Test(groups = {"Regression"})
 public class ProjectTest  extends BaseApiTest {
     @Test(description = "Project can not be created with empty name", groups = {"Negative", "CRUD"})
     public void projectCanNotBeCreatedWithEmptyName() {

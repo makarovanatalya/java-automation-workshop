@@ -6,6 +6,7 @@ import com.example.teamcity.api.models.Projects;
 import com.example.teamcity.ui.pages.projectbased.ProjectsPage;
 import org.testng.annotations.Test;
 
+@Test(groups = {"Regression"})
 public class SearchProjectTest extends BaseUiTest{
     @Test(description = "User should be able to find a project", groups = {"Positive"})
     public void userSearchesProject() {

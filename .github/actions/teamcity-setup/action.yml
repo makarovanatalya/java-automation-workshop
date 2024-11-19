@@ -74,3 +74,12 @@ runs:
     - name: Set up superUserToken config property
       shell: bash
       run: echo "superUserToken=$SUPER_USER_TOKEN" >> src/main/resources/config.properties
+
+    - name: Run TeamCity Agent
+      shell: bash
+      run: |
+        docker run -d -e SERVER_URL="http://$HOST:8111" jetbrains/teamcity-agent
+
+    - name: Setup TeamCity agent
+      shell: bash
+      run: ./mvnw clean test -Dtest=SetupAgentTest#setupTeamCityAgentTest

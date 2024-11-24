@@ -1,0 +1,1 @@
+[{"uid":"49e459b4519044e3","name":"afterTest","time":{"start":1732454525088,"stop":1732454525088,"duration":0},"status":"failed","severity":"normal"},{"uid":"26197801eb83126c","name":"setupTeamCityAgentTest","time":{"start":1732454472647,"stop":1732454525067,"duration":52420},"status":"broken","severity":"normal"}]

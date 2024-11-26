@@ -2,9 +2,7 @@ package com.example.teamcity.api.requests;
 
 import com.example.teamcity.api.models.Agents;
 import com.example.teamcity.api.models.AuthorizedInfo;
-import com.example.teamcity.api.models.ServerAuthSettings;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 

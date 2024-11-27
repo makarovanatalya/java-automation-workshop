@@ -1,0 +1,17 @@
+name: Deploy backend
+
+on: workflow_call
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build backend
+        run: echo backend building mock
+
+  deploy-stage:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy backend to stage/review app
+        run: echo backend deploying mock

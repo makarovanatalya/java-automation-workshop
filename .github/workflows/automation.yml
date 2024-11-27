@@ -1,0 +1,85 @@
+name: Run tests
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        description: api | ui
+        required: true
+        type: string
+
+jobs:
+  validate-checkstyle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Grant execute permission to mvnw
+        run: chmod +x ./mvnw
+
+      - name: Validate Checkstyle
+        run: ./mvnw validate
+
+  run-tests:
+    needs: validate-checkstyle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: TeamCity Setup
+        uses: ./.github/actions/teamcity-setup
+
+      - name: Run tests
+        continue-on-error: true
+        run: ./mvnw test -Dtest='com.example.teamcity.${{ inputs.package }}.**' -Dgroups=Regression
+
+      - name: Grant execute permission to swagger coverage commandline
+        continue-on-error: true
+        if: ${{ inputs.package == 'api' }}
+        run: chmod +x .swagger-coverage-commandline/bin/swagger-coverage-commandline
+
+      - name: Run Swagger Coverage
+        continue-on-error: true
+        if: ${{ inputs.package == 'api' }}
+        run: .swagger-coverage-commandline/bin/swagger-coverage-commandline -s http://$HOST:8111/app/rest/swagger.json -i target/swagger-coverage-output -q
+
+      - name: Save Swagger Coverage
+        uses: actions/upload-artifact@v4
+        if: ${{ inputs.package == 'api' }}
+        with:
+          name: swagger-coverage
+          path: |
+            swagger-coverage-report.html
+            swagger-coverage-results.json
+
+      - name: Load test report history
+        uses: actions/checkout@v2
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: target/allure-results
+          subfolder: ${{ inputs.package }}
+
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+          force_orphan: true

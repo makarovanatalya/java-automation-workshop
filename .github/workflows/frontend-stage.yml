@@ -1,0 +1,17 @@
+name: Deploy frontend
+
+on: workflow_call
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build frontend
+        run: echo frontend building mock
+
+  deploy-stage:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy frontend to stage/review app
+        run: echo frontend deploying mock

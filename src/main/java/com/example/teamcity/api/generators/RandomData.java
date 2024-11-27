@@ -16,7 +16,7 @@ public final class RandomData {
     }
 
     public static String getRandomSpecialCharacter() {
-        String specialCharacters = "!@#$%^&*()_+{}[]";
+        String specialCharacters = "!@#$%^&*()+{}[]";
         return RandomStringUtils.random(1, specialCharacters);
     }
 }

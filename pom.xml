@@ -16,6 +16,7 @@
         <allure.version>2.29.0</allure.version>
         <jackson.version>2.18.0</jackson.version>
         <selenide.version>7.5.1</selenide.version>
+        <swagger-coverage-version>1.5.0</swagger-coverage-version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
@@ -44,7 +45,19 @@
             <artifactId>allure-testng</artifactId>
             <version>${allure.version}</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-selenide -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-selenide</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-rest-assured -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -68,6 +81,12 @@
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
             <version>${selenide.version}</version>
+        </dependency>
+        <!-- https://github.com/viclovsky/swagger-coverage -->
+        <dependency>
+            <groupId>com.github.viclovsky</groupId>
+            <artifactId>swagger-coverage-rest-assured</artifactId>
+            <version>${swagger-coverage-version}</version>
         </dependency>
     </dependencies>
 </project>
